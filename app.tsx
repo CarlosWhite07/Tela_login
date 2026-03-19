@@ -8,6 +8,10 @@ export default function App() {
  const [mensagem, setmensagem] = useState(''); 
  const [tela, setTela] = useState(''); 
  
+ const [alunos, setAlunos] = useState([]);
+ const [nome, setNome] = useState([]);
+ const [idade, setIdade] = useState([]);
+ const [curso, setCurso] = useState([]);
 
  function validarLogin() {
    setmensagem('');
@@ -25,10 +29,48 @@ export default function App() {
     setmensagem('');
   }
 
+   function cadastrarAluno() {
+    const novoAluno = {
+    nome,
+    idade,
+    curso
+  };
+
+  setAlunos([...alunos, novoAluno]);
+
+ setNome('');
+ setIdade('');
+ setCurso('');
+
+ }
+
 if (tela == 'mudar') {
 return (
-   <View>
-    <Text style={styles.titulo}> Mudou de tela </Text>
+   <View style={styles.container}>
+    <Text style={styles.titulo}> Cadastro de Alunos </Text>
+    <Text>Nome do aluno: </Text>
+    <TextInput style={styles.input} onChangeText={setNome} placeholder = "Digite o nome do aluno" value={nome}/>
+    
+    <Text>Idade do aluno: </Text>
+    <TextInput style={styles.input} onChangeText={setIdade} placeholder = "Digite a idade no aluno" value={idade}/>
+
+    <Text>Curso do aluno: </Text>
+    <TextInput style={styles.input} onChangeText={setCurso} placeholder = "Digite o curso no aluno" value={curso}/>
+
+      <Button title= "Cadastrar aluno" style={styles.botao} onPress={cadastrarAluno}/>
+
+    <br/>
+
+      {alunos.map((aluno, index) => (
+        <View key={index}>
+          <Text>Nome: {aluno.nome}</Text>
+          <Text>Idade: {aluno.idade}</Text>
+          <Text>Curso: {aluno.curso}</Text>
+          <Text>..........</Text>
+        </View>
+      )
+)}
+
       <Button title= "Voltar" style={styles.botao} onPress={voltartela}/>
    </View>
  );
@@ -78,6 +120,6 @@ margin: 10,
 },
 
 botao: {
-  
+
   },
 });
