@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, Button, } from 'react-native';
+import { View, Text, TextInput, StyleSheet, Button } from 'react-native';
 
 export default function App() {
  
@@ -9,9 +9,9 @@ export default function App() {
  const [tela, setTela] = useState(''); 
  
  const [alunos, setAlunos] = useState([]);
- const [nome, setNome] = useState([]);
- const [idade, setIdade] = useState([]);
- const [curso, setCurso] = useState([]);
+ const [nome, setNome] = useState('');
+ const [idade, setIdade] = useState('');
+ const [curso, setCurso] = useState('');
 
  function validarLogin() {
    setmensagem('');
@@ -22,104 +22,148 @@ export default function App() {
    }
  }
 
-  function voltartela(){
+ function voltartela(){
     setTela('');
     setlogin('');
     setSenha('');
     setmensagem('');
-  }
-
-   function cadastrarAluno() {
-    const novoAluno = {
-    nome,
-    idade,
-    curso
-  };
-
-  setAlunos([...alunos, novoAluno]);
-
- setNome('');
- setIdade('');
- setCurso('');
-
  }
 
-if (tela == 'mudar') {
-return (
+ function cadastrarAluno() {
+  const novoAluno = { nome, idade, curso };
+  setAlunos([...alunos, novoAluno]);
+
+  setNome('');
+  setIdade('');
+  setCurso('');
+ }
+
+ if (tela == 'mudar') {
+ return (
    <View style={styles.container}>
-    <Text style={styles.titulo}> Cadastro de Alunos </Text>
-    <Text>Nome do aluno: </Text>
-    <TextInput style={styles.input} onChangeText={setNome} placeholder = "Digite o nome do aluno" value={nome}/>
+    <Text style={styles.titulo}>Cadastro de Alunos</Text>
+
+    <Text style={styles.label}>Nome:</Text>
+    <TextInput 
+      style={styles.input} 
+      onChangeText={setNome} 
+      placeholder="Digite o nome"
+      value={nome}
+    />
     
-    <Text>Idade do aluno: </Text>
-    <TextInput style={styles.input} onChangeText={setIdade} placeholder = "Digite a idade no aluno" value={idade}/>
+    <Text style={styles.label}>Idade:</Text>
+    <TextInput 
+      style={styles.input} 
+      onChangeText={setIdade} 
+      placeholder="Digite a idade"
+      value={idade}
+    />
 
-    <Text>Curso do aluno: </Text>
-    <TextInput style={styles.input} onChangeText={setCurso} placeholder = "Digite o curso no aluno" value={curso}/>
+    <Text style={styles.label}>Curso:</Text>
+    <TextInput 
+      style={styles.input} 
+      onChangeText={setCurso} 
+      placeholder="Digite o curso"
+      value={curso}
+    />
 
-      <Button title= "Cadastrar aluno" style={styles.botao} onPress={cadastrarAluno}/>
+    <View style={styles.botao}>
+      <Button title="Cadastrar aluno" onPress={cadastrarAluno}/>
+    </View>
 
-    <br/>
+    {alunos.map((aluno, index) => (
+      <View key={index} style={styles.card}>
+        <Text>Nome: {aluno.nome}</Text>
+        <Text>Idade: {aluno.idade}</Text>
+        <Text>Curso: {aluno.curso}</Text>
+      </View>
+    ))}
 
-      {alunos.map((aluno, index) => (
-        <View key={index}>
-          <Text>Nome: {aluno.nome}</Text>
-          <Text>Idade: {aluno.idade}</Text>
-          <Text>Curso: {aluno.curso}</Text>
-          <Text>..........</Text>
-        </View>
-      )
-)}
+    <View style={styles.botao}>
+      <Button title="Voltar" onPress={voltartela}/>
+    </View>
 
-      <Button title= "Voltar" style={styles.botao} onPress={voltartela}/>
    </View>
  );
-
 }
-
 
 return(
   <View style={styles.container}>
-  <Text style={styles.titulo}>Tela de login </Text>
+    <Text style={styles.titulo}>Tela de Login</Text>
 
-  <Text>Login:</Text>
-  <TextInput style={styles.input}placeholder="Digite seu login:" onChangeText={setlogin} />
+    <Text style={styles.label}>Login:</Text>
+    <TextInput 
+      style={styles.input}
+      placeholder="Digite seu login"
+      onChangeText={setlogin}
+    />
 
-  <Text>Senha:</Text>
-  <TextInput style={styles.input}placeholder="Digite seu senha:" onChangeText={setSenha}/>
+    <Text style={styles.label}>Senha:</Text>
+    <TextInput 
+      style={styles.input}
+      placeholder="Digite sua senha"
+      onChangeText={setSenha}
+    />
 
-  <Button title="Entrar" style={styles.botao} onPress={validarLogin}/>
+    <View style={styles.botao}>
+      <Button title="Entrar" onPress={validarLogin}/>
+    </View>
 
-  <Text>{mensagem}</Text>
+    <Text style={styles.mensagem}>{mensagem}</Text>
 
   </View>
-
-
-  );
+);
 }
 
-const styles = StyleSheet.create ({
+const styles = StyleSheet.create({
   container: {
-    alignItems: "center",
-    backgroundColor: "#4CAF50",
     flex: 1,
+    backgroundColor: "#5F9EA0",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 20,
   },
 
-  titulo:{
-    fontSize: 25,
-    color: "blue"
-},
-
-input:{
-textAlign:"center",
-borderWidth: 2,
-borderColor: "blue",
-borderRadius: 8,
-backgroundColor: "yellow",
-margin: 10,
-},
-
-botao: {
-
+  titulo: {
+    fontSize: 26,
+    color: "black",
+    marginBottom: 20,
   },
+
+  label: {
+    alignSelf: "flex-start",
+    marginLeft: 20,
+    fontSize: 16,
+    color: "black",
+  },
+
+  input: {
+    width: "90%",
+    textAlign: "center",
+    borderWidth: 3,
+    borderColor: "#E0FFFF",
+    borderRadius: 8,
+    backgroundColor: "#E0EEEE",
+    marginBottom: 15,
+    padding: 8,
+  },
+
+  botao: {
+    width: "60%",
+    marginVertical: 10,
+  },
+
+  mensagem: {
+    marginTop: 10,
+    color: "red",
+    fontWeight: "bold",
+  },
+
+  card: {
+    backgroundColor: "white",
+    width: "90%",
+    padding: 10,
+    marginTop: 10,
+    borderRadius: 8,
+  }
 });
