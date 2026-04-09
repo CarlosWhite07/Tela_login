@@ -12,10 +12,11 @@ export default function App() {
  const [nome, setNome] = useState('');
  const [idade, setIdade] = useState('');
  const [curso, setCurso] = useState('');
+ const [editandoIndex, setEditandoIndex] = useState(null);
 
  function validarLogin() {
    setmensagem('');
-   if(login === 'admin' && senha == '123456') {
+   if(login === 'admin' && senha === '123456') {
       setTela('mudar');
    } else{
      setmensagem('Login ou senha incorretos');
@@ -31,14 +32,37 @@ export default function App() {
 
  function cadastrarAluno() {
   const novoAluno = { nome, idade, curso };
-  setAlunos([...alunos, novoAluno]);
+
+  if (editandoIndex !== null) {
+    const listaAtualizada = [...alunos];
+    listaAtualizada[editandoIndex] = novoAluno;
+    setAlunos(listaAtualizada);
+    setEditandoIndex(null);
+  } else {
+    setAlunos([...alunos, novoAluno]);
+  }
 
   setNome('');
   setIdade('');
   setCurso('');
  }
 
- if (tela == 'mudar') {
+ function editarAluno(index) {
+  const aluno = alunos[index];
+
+  setNome(aluno.nome);
+  setIdade(aluno.idade);
+  setCurso(aluno.curso);
+
+  setEditandoIndex(index);
+ }
+
+ function removerAluno(index) {
+   const novaLista = alunos.filter((_, i) => i !== index);
+   setAlunos(novaLista); 
+ }
+
+ if (tela === 'mudar') {
  return (
    <View style={styles.container}>
     <Text style={styles.titulo}>Cadastro de Alunos</Text>
@@ -68,7 +92,10 @@ export default function App() {
     />
 
     <View style={styles.botao}>
-      <Button title="Cadastrar aluno" onPress={cadastrarAluno}/>
+      <Button 
+        title={editandoIndex !== null ? "Atualizar aluno" : "Cadastrar aluno"} 
+        onPress={cadastrarAluno}
+      />
     </View>
 
     {alunos.map((aluno, index) => (
@@ -76,13 +103,22 @@ export default function App() {
         <Text>Nome: {aluno.nome}</Text>
         <Text>Idade: {aluno.idade}</Text>
         <Text>Curso: {aluno.curso}</Text>
+
+        <Button 
+          title="Editar" 
+          onPress={() => editarAluno(index)}
+        />
+
+        <Button 
+          title="Excluir" 
+          onPress={() => removerAluno(index)}
+        />
       </View>
     ))}
 
     <View style={styles.botao}>
       <Button title="Voltar" onPress={voltartela}/>
     </View>
-
    </View>
  );
 }
@@ -103,6 +139,7 @@ return(
       style={styles.input}
       placeholder="Digite sua senha"
       onChangeText={setSenha}
+      secureTextEntry
     />
 
     <View style={styles.botao}>
